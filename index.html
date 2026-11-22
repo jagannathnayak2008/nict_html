@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML MCQ Online Examination - 50 Questions</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="logo-icon">&lt;/&gt;</div>
+        <div>
+          <h1>HTML MCQ Assessment</h1>
+          <span>Official Evaluation Portal &bull; Target: nict.nou@gmail.com</span>
+        </div>
+      </div>
+
+      <div class="student-bar" id="student-header-bar">
+        <div class="student-tag">
+          <span style="font-size: 1.1rem;">👤</span>
+          <span id="display-student-name">Student</span>
+        </div>
+        <div class="student-tag" style="background: #f1f5f9; color: var(--secondary);">
+          <span id="display-student-roll">ID: --</span>
+        </div>
+        <div class="timer-box" id="timer-box">
+          <span>⏱ Time Left:</span>
+          <span id="timer-display">60:00</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+
+    <!-- STUDENT REGISTRATION MODAL -->
+    <div class="modal-overlay" id="start-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Student Examination Entry</h2>
+          <p>Please enter your details to initialize the 50 HTML MCQ Assessment.</p>
+        </div>
+        <div class="modal-body">
+          <form id="student-form">
+            <div class="form-group">
+              <label for="input-name">Student Full Name *</label>
+              <input type="text" id="input-name" placeholder="Enter your full name" required autofocus>
+            </div>
+            <div class="form-group">
+              <label for="input-roll">Roll / Registration Number *</label>
+              <input type="text" id="input-roll" placeholder="e.g. NOU/2026/0452" required>
+            </div>
+            <div class="form-group">
+              <label for="input-email">Student Email Address *</label>
+              <input type="email" id="input-email" placeholder="e.g. student@example.com" required>
+            </div>
+            <div class="form-group">
+              <label for="input-center">Institute / Center Name</label>
+              <input type="text" id="input-center" placeholder="NICT / Nalanda Open University" value="NICT Computer Education">
+            </div>
+
+            <div class="rules-list">
+              <strong>Assessment Guidelines:</strong>
+              <ul>
+                <li>Total Questions: <strong>50 HTML MCQs</strong>.</li>
+                <li>Marking Scheme: <strong>1 Mark each</strong> (Maximum Marks: 50).</li>
+                <li>Duration: <strong>60 Minutes</strong>.</li>
+                <li>After clicking <strong>Submit</strong>, you will receive an instant summary report and complete answer key.</li>
+                <li>The official test report will be dispatched to <strong>nict.nou@gmail.com</strong>.</li>
+              </ul>
+            </div>
+
+            <button type="submit" class="btn-primary">
+              <span>Start Assessment</span> &rarr;
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBMIT CONFIRMATION MODAL -->
+    <div class="modal-overlay" id="confirm-modal" style="display: none;">
+      <div class="modal-content" style="max-width: 480px;">
+        <div class="modal-header" style="background: linear-gradient(135deg, #0f172a, #1e293b);">
+          <h2>Confirm Final Submission</h2>
+          <p>Review your exam attempt before generating the official report.</p>
+        </div>
+        <div class="modal-body">
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <span>Total Questions:</span>
+              <strong>50</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--success);">
+              <span>Answered Questions:</span>
+              <strong id="confirm-answered">0</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: var(--warning);">
+              <span>Unattempted Questions:</span>
+              <strong id="confirm-unattempted">50</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; color: var(--purple);">
+              <span>Marked for Review:</span>
+              <strong id="confirm-review">0</strong>
+            </div>
+          </div>
+
+          <p style="font-size: 0.9rem; color: var(--secondary); margin-bottom: 1.5rem;">
+            Once submitted, your responses will be evaluated (1 mark each), your score card and full answer key will be displayed, and the report will be dispatched to <strong>nict.nou@gmail.com</strong>.
+          </p>
+
+          <div style="display: flex; gap: 0.75rem;">
+            <button type="button" class="btn-secondary" id="btn-cancel-submit" style="flex: 1; justify-content: center;">
+              Return to Exam
+            </button>
+            <button type="button" class="btn-submit" id="btn-confirm-submit" style="flex: 1; justify-content: center;">
+              Yes, Submit Exam
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAM INTERFACE -->
+    <div id="quiz-section" style="display: none;">
+      <div class="quiz-grid">
+        <!-- Question Workspace -->
+        <div class="question-card">
+          <div class="question-meta">
+            <span class="question-counter" id="q-index-badge">Question 1 of 50</span>
+            <span class="marks-badge">+1.0 Mark | 0.0 Negative</span>
+          </div>
+
+          <div class="question-title" id="q-text">
+            Loading question...
+          </div>
+
+          <!-- Options -->
+          <div class="options-list" id="options-container">
+            <!-- Dynamically injected options -->
+          </div>
+
+          <!-- Question Controls -->
+          <div class="quiz-actions">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="button" class="btn-secondary" id="btn-prev" disabled>
+                &larr; Previous
+              </button>
+              <button type="button" class="btn-secondary" id="btn-next">
+                Next &rarr;
+              </button>
+              <button type="button" class="btn-secondary btn-review" id="btn-mark-review">
+                ☆ Mark for Review
+              </button>
+              <button type="button" class="btn-secondary" id="btn-clear">
+                Clear Selection
+              </button>
+            </div>
+
+            <div>
+              <button type="button" class="btn-submit" id="btn-submit-quiz">
+                ✓ Submit Examination
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Question Palette -->
+        <aside class="palette-card">
+          <div class="palette-title">
+            <span>Question Palette</span>
+            <span style="font-size: 0.8rem; font-weight: 500; color: var(--secondary);">Total: 50</span>
+          </div>
+
+          <div class="legend">
+            <div class="legend-item">
+              <span class="legend-dot answered"></span>
+              <span>Answered</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot review"></span>
+              <span>Marked Review</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot unanswered"></span>
+              <span>Not Answered</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot current"></span>
+              <span>Current</span>
+            </div>
+          </div>
+
+          <div class="palette-grid" id="question-palette">
+            <!-- 50 question buttons dynamically rendered -->
+          </div>
+
+          <div class="palette-stats">
+            <span>Progress:</span>
+            <strong id="stat-answered-count">0 / 50</strong>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- RESULT & SUMMARY REPORT SCREEN -->
+    <div id="result-section" class="result-screen" style="display: none;">
+      
+      <!-- Official Email Dispatch Banner -->
+      <div class="email-notification-banner" id="email-banner">
+        <div class="email-content">
+          <div class="email-icon">📨</div>
+          <div class="email-text" id="email-status-text">
+            <strong>Transmitting Assessment Report...</strong>
+            <span>Dispatching official result record to <strong>nict.nou@gmail.com</strong></span>
+          </div>
+        </div>
+        <div class="email-actions">
+          <a href="mailto:nict.nou@gmail.com" class="btn-outline-sm" id="email-fallback-link" target="_blank">
+            ✉ Open Mail App
+          </a>
+          <button type="button" class="btn-outline-sm" onclick="copyReportToClipboard()">
+            📋 Copy Summary
+          </button>
+        </div>
+      </div>
+
+      <!-- Score Hero -->
+      <div class="score-hero">
+        <div class="score-circle" id="res-score-circle">
+          <div class="score-circle-inner">
+            <div class="score-num" id="res-score-num">0</div>
+            <div class="score-total" id="res-score-total">/ 50</div>
+          </div>
+        </div>
+
+        <div class="score-details">
+          <h2>Examination Summary Report</h2>
+          <div class="badge-grade" id="res-grade-badge">Grade: Pass</div>
+
+          <div class="student-info-summary">
+            <span>Student: <strong id="res-student-name">--</strong></span>
+            <span>Roll No: <strong id="res-student-roll">--</strong></span>
+            <span>Email: <strong id="res-student-email">--</strong></span>
+            <span>Time Taken: <strong id="res-student-time">--</strong></span>
+            <span>Submitted: <strong id="res-timestamp">--</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stat Tiles -->
+      <div class="stat-cards-grid">
+        <div class="stat-card correct">
+          <div class="val" id="stat-correct-val" style="color: var(--success);">0</div>
+          <div class="lbl">Correct Answers (+1 Mark)</div>
+        </div>
+        <div class="stat-card wrong">
+          <div class="val" id="stat-wrong-val" style="color: var(--danger);">0</div>
+          <div class="lbl">Incorrect Answers</div>
+        </div>
+        <div class="stat-card unanswered">
+          <div class="val" id="stat-unattempted-val" style="color: var(--secondary);">0</div>
+          <div class="lbl">Unattempted</div>
+        </div>
+        <div class="stat-card accuracy">
+          <div class="val" id="stat-accuracy-val" style="color: var(--primary);">0%</div>
+          <div class="lbl">Total Percentage</div>
+        </div>
+      </div>
+
+      <!-- Complete Question Review Header -->
+      <div class="review-header">
+        <div>
+          <h3 style="font-size: 1.3rem; color: var(--dark);">Detailed Answer Key & Review (All 50 Questions)</h3>
+          <p style="font-size: 0.88rem; color: var(--secondary);">
+            Compare your selections against the verified answers with in-depth technical explanations.
+          </p>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="review-filter">
+          <button type="button" class="filter-btn active" data-filter="all">All (50)</button>
+          <button type="button" class="filter-btn" data-filter="correct">Correct</button>
+          <button type="button" class="filter-btn" data-filter="wrong">Incorrect</button>
+          <button type="button" class="filter-btn" data-filter="unanswered">Unanswered</button>
+        </div>
+      </div>
+
+      <!-- Review List -->
+      <div class="review-questions-list" id="review-list-container">
+        <!-- 50 review cards dynamically injected -->
+      </div>
+
+      <!-- Bottom Print & Share Buttons -->
+      <div class="report-actions-bottom">
+        <button type="button" class="btn-primary" style="width: auto;" onclick="window.print()">
+          🖨 Print / Save as PDF
+        </button>
+        <button type="button" class="btn-secondary" onclick="copyReportToClipboard()">
+          📋 Copy Summary
+        </button>
+        <button type="button" class="btn-secondary" onclick="window.location.reload()">
+          🔄 Retake Assessment
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Load Scripts -->
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
